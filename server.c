@@ -6,7 +6,7 @@
 /*   By: kogitsu <kogitsu@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 21:01:47 by kogitsu           #+#    #+#             */
-/*   Updated: 2023/04/19 21:51:33 by kogitsu          ###   ########.fr       */
+/*   Updated: 2023/04/22 17:19:24 by kogitsu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,27 @@
 #include <signal.h>
 #include <stdlib.h>
 
-void	func(int signum)
+void	func1(int signum)
 {
-	printf("%dというPIDを受け取った\n", signum);
-	exit(0);
+	printf("0\n");
+}
+
+void	func2(int signum)
+{
+	printf("1\n");
 }
 
 int	main(void)
 {
 	pid_t	my_pid;
-	int		num;
 
-	num = 1234;
 	my_pid = getpid();
 	printf("my_pid=%d\n", (int)my_pid);
-	signal(my_pid, func);
+	signal(SIGUSR1, func1);
+	signal(SIGUSR2, func2);
 	while (1)
 	{
-		sleep(1);
+		pause();
 	}
 	return (0);
 }
