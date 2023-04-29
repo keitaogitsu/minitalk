@@ -6,7 +6,7 @@
 /*   By: kogitsu <kogitsu@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 21:01:29 by kogitsu           #+#    #+#             */
-/*   Updated: 2023/04/22 17:31:56 by kogitsu          ###   ########.fr       */
+/*   Updated: 2023/04/24 21:46:13 by kogitsu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	bit_sending(char c, int p_id)
 		specific_digit = (unsigned int)1 << n;
 		if ((c & specific_digit) == 0)
 		{
-
 			printf("n = %d, p_id = %d, 0\n", n, p_id);
 			kill((pid_t)p_id, SIGUSR1);
 		}
@@ -39,7 +38,7 @@ void	bit_sending(char c, int p_id)
 		if (n == 0)
 			break ;
 		n--;
-		// sleep(1);
+		usleep(500);
 	}
 }
 
