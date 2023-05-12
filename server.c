@@ -6,7 +6,7 @@
 /*   By: kogitsu <kogitsu@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 21:01:47 by kogitsu           #+#    #+#             */
-/*   Updated: 2023/04/27 14:21:05 by kogitsu          ###   ########.fr       */
+/*   Updated: 2023/05/08 10:13:20 by kogitsu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,54 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_BUFFER_SIZE 256
+#define MAX_BUFFER_SIZE 8
+
+void print_bits(unsigned char byte) 
+{
+	int	a;
+    for (int i = 7; i >= 0; i--) {
+		a = ((byte >> i) & 1) + '0';
+        write(1, &a, 1);
+    }
+	write(1, ",", 1);
+}
 
 void	func(int signum)
 {
-	static int count = 0;
-	static unsigned char buffer[MAX_BUFFER_SIZE];
-	static int buffer_idx = 0;
-	
+	static int 				count;
+	static unsigned char 	buf[MAX_BUFFER_SIZE];
+	static int 				buf_idx;
+	int						i;
+	static unsigned char	c;
+		
 	if (signum == SIGUSR1)
-		buffer[buffer_idx] = (buffer[buffer_idx] << 1) | 0;
+		buf[buf_idx] = (buf[buf_idx] << 1) | 0;
 	else if (signum == SIGUSR2)
-		buffer[buffer_idx] = (buffer[buffer_idx] << 1) | 1;
+		buf[buf_idx] = (buf[buf_idx] << 1) | 1;
 	count++;
+	i = 0;
+	while (i < MAX_BUFFER_SIZE)
+	{
+		print_bits(buf[i]);
+		i++;
+	}
+	printf("\n");
 	if (count == 8)
 	{
-		buffer_idx++;
-		if (buffer_idx >= MAX_BUFFER_SIZE)
+		printf("%c:%d\n", buf[buf_idx], buf_idx);
+		buf_idx++;
+		if (buf_idx >= MAX_BUFFER_SIZE)
 			exit(1);
 		count = 0;
 	}
-	if (buffer_idx && buffer_idx % 8 == 0)
-	{
-		write(1, buffer, buffer_idx);
-		memset(buffer, 0, MAX_BUFFER_SIZE);
-		buffer_idx = 0;
-	}
+	i = 0;
+	// if (buf_idx)
+	// {
+	// 	write(1, buf, buf_idx+1);
+	// 	memset(buf, 0, MAX_BUFFER_SIZE);
+	// 	buf_idx = 0;
+	// }
 }
-
-
 
 int	main(void)
 {
